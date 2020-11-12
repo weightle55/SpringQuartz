@@ -15,9 +15,6 @@ public class BatchandquartzApplication {
 	@Autowired
 	private AcmaQuartzScheduler scheduler;
 
-	@Autowired
-	private AAAA aaaa;
-
 	public static void main(String[] args) {
 		SpringApplication.run(BatchandquartzApplication.class, args);
 	}

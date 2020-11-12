@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author jungheonlee@nhn.com
  */
-@Component
+// @Component
 public class AAAA implements InitializingBean {
 
 	@Override

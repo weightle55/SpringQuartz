@@ -19,9 +19,6 @@ public class AcmaQuartzScheduler {
 
 	private static final Logger logger = LoggerFactory.getLogger(AcmaQuartzScheduler.class);
 
-//	private SchedulerFactory schedulerFactory;
-//	private Scheduler scheduler;
-
 	@Autowired
 	private ApplicationContext applicationContext;
 
@@ -52,12 +49,6 @@ public class AcmaQuartzScheduler {
 				.newTrigger()
 				.withSchedule(CronScheduleBuilder.cronSchedule("*/5 * * * * ?"))
 						.build();
-//
-//		Trigger trigger2 =
-//				TriggerBuilder.newTrigger().withSchedule(CronScheduleBuilder.cronSchedule("15 * * * * ?")).build();
-//
-//		scheduler.scheduleJob(job, trigger);
-//		scheduler.scheduleJob(job2,trigger2);
 
 		scheduler.scheduleJob(batchjob,trigger);
 	}

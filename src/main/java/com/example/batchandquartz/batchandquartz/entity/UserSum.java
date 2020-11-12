@@ -1,12 +1,15 @@
 package com.example.batchandquartz.batchandquartz.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 /**
  * @author jungheonlee@nhn.com
  */
 @Entity
-@Table
+@DynamicUpdate
+@Table(name ="USERSUM")
 public class UserSum {
 
 	@Id
@@ -18,7 +21,6 @@ public class UserSum {
 
 	@Column
 	private Long sumOfUseTime;
-
 
 	public String getUserName() {
 		return userName;
@@ -34,6 +36,9 @@ public class UserSum {
 
 	public void setSumOfUseTime(Long sumOfUseTime) {
 		this.sumOfUseTime = sumOfUseTime;
+	}
+
+	public UserSum() {
 	}
 
 	public UserSum(String userName, Long sumOfUseTime) {

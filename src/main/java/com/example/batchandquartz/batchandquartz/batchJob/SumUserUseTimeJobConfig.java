@@ -14,8 +14,7 @@ import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JpaItemWriter;
@@ -50,21 +49,13 @@ public class SumUserUseTimeJobConfig {
 	private JobRepository jobRepository;
 
 	private final Logger logger = LoggerFactory.getLogger(SumUserUseTimeJobConfig.class);
-//
-//	@Bean
-//	public JobLauncher jobLauncher() throws Exception {
-//		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-//		jobLauncher.setJobRepository(jobRepository);
-//		jobLauncher.setTaskExecutor(taskExecutor());
-//		jobLauncher.afterPropertiesSet();
-//		return jobLauncher;
-//	}
 
-	@Bean//(name = "sumUserUseTimeJob")
+	@Bean(name = "sumUserUseTimeJob")
 	public Job sumUserUseTimeJob(JobBuilderFactory jobBuilderFactory, Step sumUserUseTimeStep){
 		return jobBuilderFactory.get("sumUserUseTimeJob")
-				//.preventRestart()
+//				.preventRestart()
 				.start(sumUserUseTimeStep)
+				//.incrementer(new RunIdIncrementer())
 				.build();
 	}
 
@@ -81,10 +72,11 @@ public class SumUserUseTimeJobConfig {
 	}
 
 	@Bean
-	@StepScope
+//	@StepScope
 	public ListItemReader<User> sumUserUseTimeReader(){
 		logger.info(Thread.currentThread().getName());
-		List<User> sumUserUseTime = userRepository.findAllByUserNameEquals("test");
+		List<User> sumUserUseTime = userRepository.findAll();
+		//User tmp = userRepository.findByUserName("test");
 		logger.info("======= Item Reader ========");
 		return new ListItemReader<>(sumUserUseTime);
 	}
@@ -94,6 +86,7 @@ public class SumUserUseTimeJobConfig {
 		return new ItemProcessor<User, UserSum>() {
 			@Override
 			public UserSum process(User user) throws Exception {
+				System.out.println("!@#!@#!@#!@#! " + user);
 				long sumOfAll = user.getUseTime();
 				UserSum userSum = userSumRepository.findByUserName(user.getUserName());
 				userSum.setUserName("test");
@@ -115,10 +108,4 @@ public class SumUserUseTimeJobConfig {
 		return new SimpleAsyncTaskExecutor("Batch_Task");
 	}
 
-	@Bean
-	public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry){
-		JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-		jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
-		return jobRegistryBeanPostProcessor;
-	}
 }

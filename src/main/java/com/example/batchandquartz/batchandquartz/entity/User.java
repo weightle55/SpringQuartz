@@ -1,5 +1,7 @@
 package com.example.batchandquartz.batchandquartz.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -7,7 +9,8 @@ import java.time.LocalDateTime;
  * @author jungheonlee@nhn.com
  */
 @Entity
-@Table
+@DynamicUpdate
+@Table(name="USER")
 public class User {
 
 	@Id
@@ -20,7 +23,7 @@ public class User {
 	@Column
 	private Long useTime;
 
-	@Column
+	@Column(name = "registerDateTime")
 	private LocalDateTime registerDateTime;
 
 	public Long getIdx() {
